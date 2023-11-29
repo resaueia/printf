@@ -6,20 +6,20 @@
 /*   By: rsaueia- <rsaueia-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 15:35:58 by rsaueia-          #+#    #+#             */
-/*   Updated: 2023/11/27 17:37:23 by rsaueia-         ###   ########.fr       */
+/*   Updated: 2023/11/28 20:02:17 by rsaueia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include <libft.h>
 
-void	putchar_print(char c)
+int	putchar_print(char c)
 {
 	write(1, &c, 1);
 	return (1);
 }
 
-void	putstr_print(char *s)
+int	putstr_print(char *s)
 {
 	size_t	index;
 
@@ -29,11 +29,12 @@ void	putstr_print(char *s)
 	return (index);
 }
 
-void	putnbr_print(int n)
+int	putnbr_print(long n, int base)
 {
-	char	current_nbr;
 	int	index;
+	char	*symbols;
 
+	symbols = "0123456789abcdef";
 	index = 0;
 	if (n == -2147483648)
 	{
@@ -44,19 +45,17 @@ void	putnbr_print(int n)
 	{
 		n = n * (-1);
 		putchar_print('-');
-		putnbr_print(n);
+		putnbr_print(symbols[n]);
 		index++;
 	}
-	else if (n <= 9)
+	else if (n <= base)
 	{
-		current_nbr = n + 48;
-		putchar_print(current_nbr);
+		putchar_print(symbols[n]);
 	}
 	else
 	{
-		putnbr_print(n / 10, fd);
-		putnbr_print(n % 10, fd);
-		index++;
+		index = putnbr_print(n / base);
+		putnbr_print(n % base);
 	}
 	return (index);
 }
@@ -71,48 +70,29 @@ int	ft_printf(const char *format, ...)
 	while (*format)
 	{
 		if (*format == '%')
-		{
 			format++;
-			count++;
-		}
 		else if (*format == 'c')
-		{
-			count += putchar_print(va_start(args, const char *));
-			format++;
-		}
+			count += putchar_print(va_arg(args, const char *));
 		else if (*format == 's')
-		{
-			count += putstr_print(va_start(args, const char *));
-			format++;
-		}
+			count += putstr_print(va_arg(args, const char *));
 		else if (*format == 'p')
 		{
 		
 		}
 		else if (*format == 'd')
-		{
-		
-		}
+			count += putnbr(va_arg(args, (long)int n, 10));
 		else if (*format == 'i')
-		{
-			count += putnbr_print(va_start(args, int *))
-		}
+			count += putnbr_print(va_arg(args, (long)int n, 10));
 		else if (*format == 'u')
-		{
-		
-		}
+			count += putnbr_print(va_arg(args, (unsigned long)int n, 10));
 		else if (*format == 'x')
-		{
-		
-		}
-		else if (*format == 'X')
-		{
 
-		}
+		else if (*format == 'X')
+
 		else if (*format == '%')
 			write (1, "%", 1);
 		else
-			ft_putchar_fd(&format);
+			ft_putchar_fd(*format);
 		format++;
 		va_end(args);
 	}
