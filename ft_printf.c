@@ -24,39 +24,37 @@ int	putstr_print(char *s)
 	size_t	index;
 
 	index = 0;
+	if (!s)
+		return (putstr_print(0));
 	while (s[index])
 		write(1, &s[index++], 1);
 	return (index);
 }
 
-int	putnbr_print(long n, int base)
+int	putnbr_print(long n, int base, int type)
 {
 	int	index;
 	char	*symbols;
 
-	symbols = "0123456789abcdef";
 	index = 0;
-	if (n == -2147483648)
-	{
-		putstr_print("-2147483648");
-		return (11);
-	}
-	else if (n < 0)
+//	if (n == -2147483648)
+//		return (putstr_print("-2147483648"));
+	if (type == 1)
+		symbols = "0123456789abcdef";
+	if (type == 2)
+		symbols = "0123456789ABCDEF";
+	if (n < 0)
 	{
 		n = n * (-1);
 		putchar_print('-');
-		putnbr_print(symbols[n]);
 		index++;
 	}
-	else if (n <= base)
+	if (n >= base)
 	{
-		putchar_print(symbols[n]);
+		index += putnbr_print(n / base, base, type);
+		index += putnbr_print(n % base, base, type);
 	}
-	else
-	{
-		index = putnbr_print(n / base);
-		putnbr_print(n % base);
-	}
+	index += putchar_print(symbols[n]);
 	return (index);
 }
 
@@ -76,9 +74,7 @@ int	ft_printf(const char *format, ...)
 		else if (*format == 's')
 			count += putstr_print(va_arg(args, const char *));
 		else if (*format == 'p')
-		{
-		
-		}
+			
 		else if (*format == 'd')
 			count += putnbr(va_arg(args, (long)int n, 10));
 		else if (*format == 'i')
@@ -86,11 +82,11 @@ int	ft_printf(const char *format, ...)
 		else if (*format == 'u')
 			count += putnbr_print(va_arg(args, (unsigned long)int n, 10));
 		else if (*format == 'x')
-
+			count += putnbr_print(va_arg(args, (long)int n, 16, 1));
 		else if (*format == 'X')
-
+			count += putnbr_print(va_arg(args, (long)int n, 16, 2));
 		else if (*format == '%')
-			write (1, "%", 1);
+			putchar_print('%');
 		else
 			ft_putchar_fd(*format);
 		format++;
