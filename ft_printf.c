@@ -6,7 +6,7 @@
 /*   By: rsaueia- <rsaueia-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 15:35:58 by rsaueia-          #+#    #+#             */
-/*   Updated: 2023/11/30 17:12:46 by rsaueia-         ###   ########.fr       */
+/*   Updated: 2023/11/30 20:52:26 by rsaueia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,37 @@ int	putstr_print(const char *s)
 	return (index);
 }
 
-int	putnbr_print(long n, int base, int type)
+int	putnbr_print_hex(long long n, int base, int type)
 {
 	int	index;
 	char	*symbols;
 
 	index = 0;
-//	if (n == -2147483648)
-//		return (putstr_print("-2147483648"));
 	if (type == 1)
 		symbols = "0123456789abcdef";
 	if (type == 2)
 		symbols = "0123456789ABCDEF";
 	if (type == 3)
 	{
-		symbols = "0123456789abcdef";
+		type = 1;
 		putstr_print("0x");
 	}
+	if (n >= base)
+	{
+		index += putnbr_print_hex(n / base, base, type);
+		index += putnbr_print_hex(n % base, base, type);
+	}
+	else
+		index += putchar_print(symbols[n]);
+	return (index);
+}
+
+int	putnbr_print_dec(long n, int base, int type)
+{
+	int	index;
+	char	*symbols;
+
+	index = 0;
 	if (n < 0)
 	{
 		n = n * (-1);
@@ -56,10 +70,11 @@ int	putnbr_print(long n, int base, int type)
 	}
 	if (n >= base)
 	{
-		index += putnbr_print(n / base, base, type);
-		index += putnbr_print(n % base, base, type);
+		index += putnbr_print_dec(n / base, base, type);
+		index += putnbr_print_dec(n % base, base, type);
 	}
-	index += putchar_print(symbols[n]);
+	else
+		index += putchar_print(n);
 	return (index);
 }
 
@@ -80,32 +95,40 @@ int	ft_printf(const char *format, ...)
 			else if (*format == 's')
 				count += putstr_print(va_arg(args, const char *));
 			else if (*format == 'p')
-				count += putnbr_print(va_arg(args, long int), 16, 3);
+				count += putnbr_print_hex(va_arg(args, long int), 16, 3);
 			else if (*format == 'd')
-				count += putnbr_print(va_arg(args, long int), 10, 1);
+				count += putnbr_print_dec(va_arg(args, long int), 10, 1);
 			else if (*format == 'i')
-				count += putnbr_print(va_arg(args, long int), 10, 1);
+				count += putnbr_print_dec(va_arg(args, long int), 10, 1);
 			else if (*format == 'u')
-				count += putnbr_print(va_arg(args, unsigned long int), 10, 1);
+				count += putnbr_print_dec(va_arg(args, unsigned long int), 10, 1);
 			else if (*format == 'x')
-				count += putnbr_print(va_arg(args, long int), 16, 1);
+				count += putnbr_print_hex(va_arg(args, long int), 16, 1);
 			else if (*format == 'X')
-				count += putnbr_print(va_arg(args, long int), 16, 2);
+				count += putnbr_print_hex(va_arg(args, long int), 16, 2);
 			else if (*format == '%')
 				putchar_print('%');
 		}
 		else
 			putchar_print(*format);
 		format++;
-		va_end(args);
 	}
+	va_end(args);
 	return (count);
 }
 
+#include <stdio.h>
 int	main(void)
 {
+	int	a;
+	int	*ptr;
+
+	a = 10;
+	ptr = &a;
 	ft_printf("Hello, my name is %s, and I am %i years old.\n", "Ezequiel", 47);
 	ft_printf("Hello, my name is %c, and I am %d years old.\n", 'E', 47);
 	ft_printf("Hello, my name is %x, and I am %X years old.\n", 42, 42);
-	ft_printf("Hello, my name is %p, and I am %X years old.\n", 42, 42);
+	printf("Hello, my name is %x, and I am %X years old.\n", 42, 42);
+	ft_printf("Hello, my name is %p, and I am %X years old.\n", ptr, 42);
+	printf("Hello, my name is %p, and I am %X years old.\n", ptr, 42);
 }
