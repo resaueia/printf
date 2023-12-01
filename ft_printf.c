@@ -6,12 +6,13 @@
 /*   By: rsaueia- <rsaueia-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/27 15:35:58 by rsaueia-          #+#    #+#             */
-/*   Updated: 2023/11/30 20:52:26 by rsaueia-         ###   ########.fr       */
+/*   Updated: 2023/12/01 15:43:29 by rsaueia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 int	putchar_print(int c)
 {
@@ -56,10 +57,9 @@ int	putnbr_print_hex(long long n, int base, int type)
 	return (index);
 }
 
-int	putnbr_print_dec(long n, int base, int type)
+int	putnbr_print_dec(long n, int base)
 {
 	int	index;
-	char	*symbols;
 
 	index = 0;
 	if (n < 0)
@@ -70,11 +70,11 @@ int	putnbr_print_dec(long n, int base, int type)
 	}
 	if (n >= base)
 	{
-		index += putnbr_print_dec(n / base, base, type);
-		index += putnbr_print_dec(n % base, base, type);
+		index += putnbr_print_dec(n / base, base);
+		index += putnbr_print_dec(n % base, base);
 	}
 	else
-		index += putchar_print(n);
+		index += putchar_print(n + 48);
 	return (index);
 }
 
@@ -97,11 +97,11 @@ int	ft_printf(const char *format, ...)
 			else if (*format == 'p')
 				count += putnbr_print_hex(va_arg(args, long int), 16, 3);
 			else if (*format == 'd')
-				count += putnbr_print_dec(va_arg(args, long int), 10, 1);
+				count += putnbr_print_dec(va_arg(args, long int), 10);
 			else if (*format == 'i')
-				count += putnbr_print_dec(va_arg(args, long int), 10, 1);
+				count += putnbr_print_dec(va_arg(args, long int), 10);
 			else if (*format == 'u')
-				count += putnbr_print_dec(va_arg(args, unsigned long int), 10, 1);
+				count += putnbr_print_dec(va_arg(args, unsigned long int), 10);
 			else if (*format == 'x')
 				count += putnbr_print_hex(va_arg(args, long int), 16, 1);
 			else if (*format == 'X')
@@ -117,7 +117,7 @@ int	ft_printf(const char *format, ...)
 	return (count);
 }
 
-#include <stdio.h>
+
 int	main(void)
 {
 	int	a;
