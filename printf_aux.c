@@ -6,7 +6,7 @@
 /*   By: rsaueia- <rsaueia-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 19:03:38 by rsaueia-          #+#    #+#             */
-/*   Updated: 2023/12/04 19:58:41 by rsaueia-         ###   ########.fr       */
+/*   Updated: 2023/12/05 20:00:19 by rsaueia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	putstr_print(const char *s)
 	return (index);
 }
 
-int	putnbr_print_hex(long long n, int base, int type)
+int	putnbr_print_hex(unsigned long int n, unsigned int base, int type)
 {
-	int	index;
+	int		index;
 	char	*symbols;
 
 	index = 0;
@@ -40,11 +40,6 @@ int	putnbr_print_hex(long long n, int base, int type)
 		symbols = "0123456789abcdef";
 	if (type == 2)
 		symbols = "0123456789ABCDEF";
-	if (type == 3)
-	{
-		type = 1;
-		putstr_print("0x");
-	}
 	if (n >= base)
 	{
 		index += putnbr_print_hex(n / base, base, type);
@@ -54,6 +49,18 @@ int	putnbr_print_hex(long long n, int base, int type)
 		index += putchar_print(symbols[n]);
 	return (index);
 }
+
+/*int	vipointer(unsigned long int n)
+{
+	int	index;
+	
+	index = 0;
+	if (!n)
+		return (putstr_print("(nil)"));
+	index += putstr_print("0x");
+	index += putnbr_print_hex(n, 16, 1);
+	return (index);
+}*/
 
 int	putnbr_print_dec(long n, int base)
 {
@@ -66,10 +73,12 @@ int	putnbr_print_dec(long n, int base)
 		index += putchar_print('-');
 	}
 	if (n >= base)
+	{
 		index += putnbr_print_dec(n / base, base);
-	index += putchar_print((n % base) + 48);
-	/*else
-		index += putchar_print(n + 48);*/
+		index += putnbr_print_dec(n % base, base);
+	}
+	else
+		index += putchar_print(n + 48);
 	return (index);
 }
 
@@ -80,7 +89,7 @@ int	putnbr_unsigned(unsigned long int n)
 	index = 0;
 	if (n >= 10)
 	{
-		index+= putnbr_unsigned(n / 10);
+		index += putnbr_unsigned(n / 10);
 		index += putnbr_unsigned(n % 10);
 	}
 	else

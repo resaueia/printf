@@ -6,11 +6,11 @@
 #    By: rsaueia- <rsaueia-@student.42.rio>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/04 15:26:46 by rsaueia-          #+#    #+#              #
-#    Updated: 2023/12/04 19:27:55 by rsaueia-         ###   ########.fr        #
+#    Updated: 2023/12/05 19:36:54 by rsaueia-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC = ft_printf.c printf_aux.c
+SRC = ft_printf.c printf_aux.c printf_pointer.c
 
 OBJS = $(SRC:.c=.o)
 
