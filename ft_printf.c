@@ -55,7 +55,7 @@ int	putnbr_print_hex(long long n, int base, int type)
 		index += putnbr_print_hex(n % base, base, type);
 	}
 	else
-		index += putchar_print(symbols[n]);
+		index += putchar_print((char)symbols[n]);
 	return (index);
 }
 
@@ -100,23 +100,23 @@ int	arg_checker(char checker, va_list args)
 
 	count = 0;
 	if (checker == 'c')
-		count += putchar_print(va_arg(args, int));
+		count = putchar_print(va_arg(args, int));
 	else if (checker == 's')
-		count += putstr_print(va_arg(args, const char *));
+		count = putstr_print(va_arg(args, const char *));
 	else if (checker == 'p')
-		count += putnbr_print_hex(va_arg(args, long int), 16, 3);
+		count = putnbr_print_hex(va_arg(args, long int), 16, 3);
 	else if (checker == 'd')
-		count += putnbr_print_dec(va_arg(args, long int), 10);
+		count = putnbr_print_dec(va_arg(args, long int), 10);
 	else if (checker == 'i')
-		count += putnbr_print_dec(va_arg(args, long int), 10);
+		count = putnbr_print_dec(va_arg(args, long int), 10);
 	else if (checker == 'u')
-		count += putnbr_unsigned(va_arg(args, unsigned long int));
+		count = putnbr_unsigned(va_arg(args, unsigned long int));
 	else if (checker == 'x')
-		count += putnbr_print_hex(va_arg(args, long int), 16, 1);
+		count = putnbr_print_hex(va_arg(args, long int), 16, 1);
 	else if (checker == 'X')
-		count += putnbr_print_hex(va_arg(args, long int), 16, 2);
+		count = putnbr_print_hex(va_arg(args, long int), 16, 2);
 	else if (checker == '%')
-		count += putchar_print('%');
+		count = putchar_print('%');
 	return (count);
 }
 
@@ -151,7 +151,7 @@ int	ft_printf(const char *format, ...)
 				putchar_print('%');*/
 		}
 		else
-			count += putchar_print(*format);
+			count += putchar_print((char)*format);
 		format++;
 	}
 	va_end(args);
