@@ -6,7 +6,7 @@
 /*   By: rsaueia- <rsaueia-@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 19:03:38 by rsaueia-          #+#    #+#             */
-/*   Updated: 2023/12/05 20:00:19 by rsaueia-         ###   ########.fr       */
+/*   Updated: 2023/12/06 16:13:04 by rsaueia-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,6 @@ int	putnbr_print_hex(unsigned long int n, unsigned int base, int type)
 		index += putchar_print(symbols[n]);
 	return (index);
 }
-
-/*int	vipointer(unsigned long int n)
-{
-	int	index;
-	
-	index = 0;
-	if (!n)
-		return (putstr_print("(nil)"));
-	index += putstr_print("0x");
-	index += putnbr_print_hex(n, 16, 1);
-	return (index);
-}*/
 
 int	putnbr_print_dec(long n, int base)
 {
